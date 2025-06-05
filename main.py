@@ -3,7 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 import google.generativeai as genai
 import os
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 import asyncio
 import json
 from datetime import datetime, timedelta
@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Carrega variáveis
-load_dotenv()
+#load_dotenv()
 DISCORD_TOKEN = os.getenv('DISCORD_TOKEN')
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
 
