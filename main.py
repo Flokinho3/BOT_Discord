@@ -237,16 +237,31 @@ async def on_command_error(ctx, error):
 @bot.tree.error
 async def on_app_command_error(interaction: discord.Interaction, error: app_commands.AppCommandError):
     if isinstance(error, app_commands.CommandOnCooldown):
-        await interaction.response.send_message(
-            f"🕐 Calma, humano! Aguarde {error.retry_after:.1f} segundos.",
-            ephemeral=True
-        )
+        try:
+            await interaction.response.send_message(
+                f"🕐 Calma, humano! Aguarde {error.retry_after:.1f} segundos.",
+                ephemeral=True
+            )
+        except discord.errors.InteractionResponded:
+            await interaction.followup.send(
+                f"🕐 Calma, humano! Aguarde {error.retry_after:.1f} segundos.",
+                ephemeral=True
+            )
     else:
-        await interaction.response.send_message(
-            "❌ Algo deu errado. Até minha perfeição tem limites.",
-            ephemeral=True
-        )
-        logger.error(f"Erro em slash command: {error}")
+        try:
+            await interaction.response.send_message(
+                "❌ Algo deu errado. Até minha perfeição tem limites.",
+                ephemeral=True
+            )
+        except discord.errors.InteractionResponded:
+            await interaction.followup.send(
+                "❌ Algo deu errado. Até minha perfeição tem limites.",
+                ephemeral=True
+            )
+
+        # Loga erro completo
+        logger.error(f"[ERRO] Slash command falhou: {type(error).__name__} - {error}")
+
 
 if __name__ == "__main__":
     try:
